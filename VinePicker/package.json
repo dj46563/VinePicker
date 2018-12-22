@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "name": "vinepicker",
+  "private": true,
+  "dependencies": {
+    "cropit": "0.5.1",
+    "gulp": "4.0.0",
+    "bootstrap": "4.2.1",
+    "jquery": "3.3.1",
+    "jquery-validation": "1.19.0",
+    "jquery-validation-unobtrusive": "3.2.11"
+  },
+  "devDependencies": {
+    "gulp-uglify": "3.0.1",
+    "gulp-concat": "2.6.1",
+    "rimraf": "2.6.1",
+    "merge-stream": "1.0.1"
+  }
+}
