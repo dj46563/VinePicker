@@ -4,17 +4,36 @@
     ViewData["Title"] = "Register";
 }
 
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/cropit/dist/jquery.cropit.js"></script>
+
+<style>
+    .cropit-preview {
+        background-color: #f8f8f8;
+        background-size: cover;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin-top: 7px;
+        width: 250px;
+        height: 250px;
+    }
+
+    .cropit-preview-image-container {
+        cursor: move;
+    }
+</style>
+
 <h2>@ViewData["Title"]</h2>
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" id="form">
             <h4>Create a new account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Input.DisplayName"></label>
-                <input asp-for="Input.DisplayName" class="form-control"/>
+                <input asp-for="Input.DisplayName" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
@@ -31,11 +50,33 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-dark">Register</button>
+            <div class="form-group">
+                <div class="image-editor">
+                    <input type="file" class="cropit-image-input"/>
+                    <div class="cropit-preview"></div>
+                    <div class="image-size-label">Resize image</div>
+                    <input type="range" class="cropit-image-zoom-input"/>
+                    <input asp-for="Input.AvatarStr" type="hidden" class="hidden-image-data form-control"/>
+                </div>
+            </div>
+            <button type="button" class="btn btn-dark" id="submit-button">Register</button>
         </form>
     </div>
 </div>
 
+<script>
+    $(function() {
+        $('.image-editor').cropit({
+            allowDragNDrop: false
+        });
+
+        $('#submit-button').click(function () {
+            var imageData = $('.image-editor').cropit('export');
+            $('.hidden-image-data').val(imageData);
+            $('form').submit();
+        });
+    })
+</script>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
