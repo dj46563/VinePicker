@@ -16,6 +16,6 @@ namespace VinePicker.Models
         public string Likes { get; set; }
         public string Username { get; set; }
         public int Rating { get; set; }
-        public int Submitter { get; set; }
+        public string Submitter { get; set; }
     }
 }
