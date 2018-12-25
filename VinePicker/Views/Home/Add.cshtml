@@ -1,0 +1,24 @@
+﻿@model Vine
+@{
+    ViewData["Title"] = "Add";
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
+
+<h2>Add</h2>
+
+<form asp-action="GetVine" asp-controller="Home" method="post" 
+      data-ajax="true" data-ajax-loading="loader"
+      data-ajax-update="#ajaxresult" data-ajax-mode="replace">
+    <label>Vine link:</label>
+    <input asp-for="Permalink"/>
+    
+    <input type="submit" value="Submit"/>
+    
+    <div id="ajaxresult">
+        @await Html.PartialAsync("_VineView")
+    </div>
+</form>
+
+<div id="loader" style="display: none">Loading...</div>

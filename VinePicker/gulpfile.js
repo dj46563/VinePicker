@@ -38,6 +38,9 @@ var deps = {
     },
     "cropit": {
         "dist/*": ""
+    },
+    "jquery-ajax-unobtrusive": {
+        "dist/*": ""
     }
 };
 
