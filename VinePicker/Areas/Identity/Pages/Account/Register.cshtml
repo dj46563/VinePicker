@@ -63,16 +63,23 @@
         </form>
     </div>
 </div>
+<img class="displayImg" style="width: 100px; height: 100px; background-color: #f8f8f8;"/>
 
 <script>
     $(function() {
         $('.image-editor').cropit({
-            allowDragNDrop: false
+            allowDragNDrop: false,
+            minZoom: 'fit',
         });
 
         $('#submit-button').click(function () {
-            var imageData = $('.image-editor').cropit('export');
+            var imageData = $('.image-editor').cropit('export', {
+                type: 'image/png',
+                originalSize: false,
+            });
             $('.hidden-image-data').val(imageData);
+
+            console.log(imageData);
             $('form').submit();
         });
     })
