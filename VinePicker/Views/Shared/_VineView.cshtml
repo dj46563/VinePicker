@@ -1,4 +1,4 @@
-﻿@model Vine
+﻿@model VinePicker.ViewModels.VineViewModel
 
 <style>
     .video {
@@ -38,67 +38,82 @@
         border: 1px solid rgba(0, 0, 0, 0.125);
         border-radius: 0.25rem;
     }
+
+    .left {
+        background-color: cyan;
+    }
+
+    .right {
+        background-color: orange;
+    }
+
+    .none {
+        background-color: #c6c6c6;
+    }
 </style>
-
-<div class="card" style="width: 36rem;">
-    <div class="card-body wrapper">
-        <video class="video" src="@Model.VideoUrl" loop></video>
-        <div class="playpause"></div>
-    </div>
-    <div class="card-footer video-info invisible">
-        <div style="float:left">
-            <p class="creator">Creator: @Model.Username</p>
-            <p class="video-stats">Likes: @Model.Likes Loops: @Model.Loops</p>
+@if (Model.Vine != null)
+{
+    <div class="card @Model.Position.ToString().ToLower()" style="width: 36rem;">
+        <div class="card-body wrapper">
+            <video class="video" src="@Model.Vine.VideoUrl" loop></video>
+            <div class="playpause"></div>
         </div>
+        <div class="card-footer video-info invisible">
+            <div style="float:left">
+                <p>@Model.Vine.Description</p>
+                <p class="creator">Creator: @Model.Vine.Username</p>
+                <p class="video-stats">Likes: @Model.Vine.Likes Loops: @Model.Vine.Loops</p>
+            </div>
 
-        <a href="@Model.Permalink">
-            <img style="width: 15%; float: right" src="https://www.freepnglogos.com/uploads/vine-png-logo/vine-text-logo-outline-png-9.png"/>
-        </a>
+            <a href="@Model.Vine.Permalink">
+                <img style="width: 15%; float: right" src="https://www.freepnglogos.com/uploads/vine-png-logo/vine-text-logo-outline-png-9.png" />
+            </a>
+        </div>
     </div>
-</div>
 
-<script>
-    $.fn.extend({
-        animateCss: function (animationName, callback) {
-            var animationEnd = (function (el) {
-                var animations = {
-                    animation: 'animationend',
-                    OAnimation: 'oAnimationEnd',
-                    MozAnimation: 'mozAnimationEnd',
-                    WebkitAnimation: 'webkitAnimationEnd',
-                };
+    <script>
+        $.fn.extend({
+            animateCss: function (animationName, callback) {
+                var animationEnd = (function (el) {
+                    var animations = {
+                        animation: 'animationend',
+                        OAnimation: 'oAnimationEnd',
+                        MozAnimation: 'mozAnimationEnd',
+                        WebkitAnimation: 'webkitAnimationEnd',
+                    };
 
-                for (var t in animations) {
-                    if (el.style[t] !== undefined) {
-                        return animations[t];
+                    for (var t in animations) {
+                        if (el.style[t] !== undefined) {
+                            return animations[t];
+                        }
                     }
-                }
-            })(document.createElement('div'));
+                })(document.createElement('div'));
 
-            this.addClass('animated ' + animationName).one(animationEnd, function () {
-                $(this).removeClass('animated ' + animationName);
+                this.addClass('animated ' + animationName).one(animationEnd, function () {
+                    $(this).removeClass('animated ' + animationName);
 
-                if (typeof callback === 'function') callback();
-            });
-
-            return this;
-        },
-    });
-
-    $('.video').parent().click(function () {
-        if ($(this).children(".video").get(0).paused) {
-            $(this).children(".video").get(0).play();
-            $(this).children(".playpause").fadeOut();
-            $('.video-info').removeClass("invisible");
-            $('.video-info').animateCss('slideInDown');
-        } else {
-            $(this).children(".video").get(0).pause();
-            $(this).children(".playpause").fadeIn();
-            if (!$('.video-info').hasClass('invisible')) {
-                $('.video-info').animateCss('slideOutUp', function() {
-                    $('.video-info').addClass('invisible');
+                    if (typeof callback === 'function') callback();
                 });
+
+                return this;
+            },
+        });
+
+        $('.video').parent().click(function () {
+            if ($(this).children(".video").get(0).paused) {
+                $(this).children(".video").get(0).play();
+                $(this).children(".playpause").fadeOut();
+                $('.video-info').removeClass("invisible");
+                $('.video-info').animateCss('slideInDown');
+            } else {
+                $(this).children(".video").get(0).pause();
+                $(this).children(".playpause").fadeIn();
+                if (!$('.video-info').hasClass('invisible')) {
+                    $('.video-info').animateCss('slideOutUp', function () {
+                        $('.video-info').addClass('invisible');
+                    });
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
+}

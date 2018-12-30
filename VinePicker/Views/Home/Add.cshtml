@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using VinePicker.Data
+@using VinePicker.ViewModels
 @model Vine
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -20,7 +21,7 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <h2 class="animated bounce">Add</h2>
+    <h2>Add</h2>
 
     <form asp-action="GetVine" asp-controller="Home" method="post"
           data-ajax="true" data-ajax-loading="loader"
@@ -31,11 +32,11 @@
         <input type="hidden" asp-for="Submitter" value="@UserManager.GetUserName(User)" />
 
         <input type="submit" value="Submit" />
-
-        <div id="ajaxresult" style="display: none">
-            @await Html.PartialAsync("_VineView")
-        </div>
     </form>
+
+    <div id="ajaxresult" style="display: none">
+        @await Html.PartialAsync("_VineView", new VineViewModel())
+    </div>
 
     <div id="loader" style="display: none">Loading...</div>
 }

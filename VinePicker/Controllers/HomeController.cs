@@ -8,6 +8,7 @@ using VinePicker.Models;
 using ScrapySharp.Network;
 using ScrapySharp.Extensions;
 using Newtonsoft.Json.Linq;
+using VinePicker.ViewModels;
 
 namespace VinePicker.Controllers
 {
@@ -73,7 +74,10 @@ namespace VinePicker.Controllers
             {
                 char character = data.Permalink[i];
                 if (!Char.IsLetterOrDigit(character))
-                    endIndex = i - 1;
+                {
+                    endIndex = i;
+                    break;
+                } 
             }
             string videoCode = data.Permalink.Substring(startIndex, endIndex - startIndex);
 
@@ -97,7 +101,12 @@ namespace VinePicker.Controllers
                 data.Rating = 0;
             }
 
-            return PartialView("_VineView", data);
+            VineViewModel viewModel = new VineViewModel()
+            {
+                Vine = data,
+                Position = Position.None
+            };
+            return PartialView("_VineView", viewModel);
         }
     }
 }

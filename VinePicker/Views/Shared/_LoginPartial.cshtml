@@ -8,12 +8,23 @@
     var user = await UserManager.GetUserAsync(User);
 }
 
+<style>
+    li.avatar {
+        background-color: #376072;
+        border-radius: 20%;
+        padding: 2px;
+        margin: 2px;
+        height: 2rem;
+        width: 2rem;
+    }
+</style>
+
 @if (SignInManager.IsSignedIn(User))
 {
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right ml-auto">
-            <li>
-                <img src="@user.AvatarStr" style="width: 20px; height: 20px"/>
+            <li class="nav-item avatar">
+                <img src="@user.AvatarStr" style="max-height: 100%; max-width: 100%"/>
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
