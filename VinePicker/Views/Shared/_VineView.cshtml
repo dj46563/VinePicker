@@ -1,4 +1,104 @@
 ﻿@model Vine
 
-<h2>Vine</h2>
-<p>@Model.Permalink</p>
+<style>
+    .video {
+        width: 100%;
+        border: 1px solid black;
+    }
+
+    .wrapper {
+        display: table;
+        width: auto;
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        z-index: 10;
+    }
+
+    .playpause {
+        background-image: url(http://www.virtualinspections.com.au/wp-content/uploads/2018/12/Play-Button-Transparent-Background.png);
+        background-repeat: no-repeat;
+        width: 30%;
+        height: 30%;
+        position: absolute;
+        left: 0%;
+        right: 0%;
+        top: 0%;
+        bottom: 0%;
+        margin: auto;
+        background-size: contain;
+        background-position: center;
+    }
+
+    .vine-card {
+        position: relative;
+        display: flex;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+    }
+</style>
+
+<div class="card" style="width: 36rem;">
+    <div class="card-body wrapper">
+        <video class="video" src="@Model.VideoUrl" loop></video>
+        <div class="playpause"></div>
+    </div>
+    <div class="card-footer video-info invisible">
+        <div style="float:left">
+            <p class="creator">Creator: @Model.Username</p>
+            <p class="video-stats">Likes: @Model.Likes Loops: @Model.Loops</p>
+        </div>
+
+        <a href="@Model.Permalink">
+            <img style="width: 15%; float: right" src="https://www.freepnglogos.com/uploads/vine-png-logo/vine-text-logo-outline-png-9.png"/>
+        </a>
+    </div>
+</div>
+
+<script>
+    $.fn.extend({
+        animateCss: function (animationName, callback) {
+            var animationEnd = (function (el) {
+                var animations = {
+                    animation: 'animationend',
+                    OAnimation: 'oAnimationEnd',
+                    MozAnimation: 'mozAnimationEnd',
+                    WebkitAnimation: 'webkitAnimationEnd',
+                };
+
+                for (var t in animations) {
+                    if (el.style[t] !== undefined) {
+                        return animations[t];
+                    }
+                }
+            })(document.createElement('div'));
+
+            this.addClass('animated ' + animationName).one(animationEnd, function () {
+                $(this).removeClass('animated ' + animationName);
+
+                if (typeof callback === 'function') callback();
+            });
+
+            return this;
+        },
+    });
+
+    $('.video').parent().click(function () {
+        if ($(this).children(".video").get(0).paused) {
+            $(this).children(".video").get(0).play();
+            $(this).children(".playpause").fadeOut();
+            $('.video-info').removeClass("invisible");
+            $('.video-info').animateCss('slideInDown');
+        } else {
+            $(this).children(".video").get(0).pause();
+            $(this).children(".playpause").fadeIn();
+            if (!$('.video-info').hasClass('invisible')) {
+                $('.video-info').animateCss('slideOutUp', function() {
+                    $('.video-info').addClass('invisible');
+                });
+            }
+        }
+    });
+</script>

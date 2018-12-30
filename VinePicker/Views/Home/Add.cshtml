@@ -1,12 +1,13 @@
-﻿@model Vine
+﻿@using Microsoft.AspNetCore.Identity
+@using VinePicker.Data
+@model Vine
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Add";
 }
-@inject UserManager<ApplicationUser> UserManager
 
-@{
-    var user = await UserManager.GetUserAsync(User);
-}
+<link rel="stylesheet" href="~/lib/a"/>
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
@@ -17,21 +18,28 @@
     }
 </script>
 
-<h2>Add</h2>
+@if (SignInManager.IsSignedIn(User))
+{
+    <h2 class="animated bounce">Add</h2>
 
-<form asp-action="GetVine" asp-controller="Home" method="post"
-      data-ajax="true" data-ajax-loading="loader"
-      data-ajax-update="#ajaxresult" data-ajax-mode="replace"
-      data-ajax-complete="onComplete">
-    <label>Vine link:</label>
-    <input asp-for="Permalink" />
-    <input type="hidden" asp-for="Submitter" value="test" />
+    <form asp-action="GetVine" asp-controller="Home" method="post"
+          data-ajax="true" data-ajax-loading="loader"
+          data-ajax-update="#ajaxresult" data-ajax-mode="replace"
+          data-ajax-complete="onComplete">
+        <label>Vine link:</label>
+        <input asp-for="Permalink" />
+        <input type="hidden" asp-for="Submitter" value="@UserManager.GetUserName(User)" />
 
-    <input type="submit" value="Submit" />
+        <input type="submit" value="Submit" />
 
-    <div id="ajaxresult" style="display: none">
-        @await Html.PartialAsync("_VineView")
-    </div>
-</form>
+        <div id="ajaxresult" style="display: none">
+            @await Html.PartialAsync("_VineView")
+        </div>
+    </form>
 
-<div id="loader" style="display: none">Loading...</div>
+    <div id="loader" style="display: none">Loading...</div>
+}
+else
+{
+    <p>You need to sign in before adding a vine</p>
+}
