@@ -7,7 +7,7 @@ namespace VinePicker.Models
 {
     public class Vine
     {
-        public string VineId { get; set; }
+        public int VineId { get; set; }
         public string Description { get; set; }
         public string VideoUrl { get; set; }
         public DateTime Created { get; set; }

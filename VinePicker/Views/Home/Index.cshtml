@@ -1,5 +1,14 @@
-﻿@{
+﻿@model VinePicker.ViewModels.IndexViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
+
+<div class="col-md-6">
+    @await Html.PartialAsync("_VineView", Model.LeftVine)
+</div>
+
+<div class="col-md-6">
+    @await Html.PartialAsync("_VineView", Model.RightVine)
+</div>
 
 

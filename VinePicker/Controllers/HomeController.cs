@@ -16,25 +16,25 @@ namespace VinePicker.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            IndexViewModel model = new IndexViewModel();
+            model.LeftVine = new VineViewModel()
+            {
+                Vine = DataAccess.DataAccess.GetVine(),
+                Position = Position.Left
+            };
+            model.RightVine = new VineViewModel()
+            {
+                Vine = DataAccess.DataAccess.GetSimilarVine(model.LeftVine.Vine.VineId, model.LeftVine.Vine.Rating),
+                Position = Position.Right
+            };
+
+            return View(model);
         }
 
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
 
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
             return View();
         }
 
@@ -47,6 +47,14 @@ namespace VinePicker.Controllers
         public IActionResult Add()
         {
             return View(new Vine());
+        }
+
+        public ActionResult AddVine(Vine model)
+        {
+            Vine vine = RetrieveVine(model.Permalink, model.Submitter);
+            DataAccess.DataAccess.AddVine(vine);
+
+            return View("Index");
         }
 
         private static string FormatNumber(long num)
@@ -65,45 +73,56 @@ namespace VinePicker.Controllers
             return num.ToString("#,0");
         }
 
-        public PartialViewResult GetVine(Vine data)
+        public Vine RetrieveVine(string permalink, string submitter = null)
         {
-            // Get the vine code
-            int startIndex = data.Permalink.IndexOf("v/") + 2;
-            int endIndex = data.Permalink.Length;
-            for (int i = startIndex; i < data.Permalink.Length; i++)
+            Vine vine = new Vine()
             {
-                char character = data.Permalink[i];
+                Permalink = permalink,
+                Submitter = submitter
+            };
+
+            // Get the vine code
+            int startIndex = vine.Permalink.IndexOf("v/") + 2;
+            int endIndex = vine.Permalink.Length;
+            for (int i = startIndex; i < vine.Permalink.Length; i++)
+            {
+                char character = vine.Permalink[i];
                 if (!Char.IsLetterOrDigit(character))
                 {
                     endIndex = i;
                     break;
-                } 
+                }
             }
-            string videoCode = data.Permalink.Substring(startIndex, endIndex - startIndex);
+            string videoCode = vine.Permalink.Substring(startIndex, endIndex - startIndex);
 
             ScrapingBrowser browser = new ScrapingBrowser();
             WebResource jsonResource = null;
             var task = Task.Run(() =>
-                {
-                    jsonResource =
-                        browser.DownloadWebResource(new Uri("https://archive.vine.co/posts/" + videoCode + ".json"));
-                });
+            {
+                jsonResource =
+                    browser.DownloadWebResource(new Uri("https://archive.vine.co/posts/" + videoCode + ".json"));
+            });
             bool isSuccess = task.Wait(TimeSpan.FromMilliseconds(2000));
             if (isSuccess)
             {
                 JArray objects = JArray.Parse("[" + jsonResource.GetTextContent() + "]");
-                data.Description = objects.First["description"].ToString();
-                data.VideoUrl = objects.First["videoUrl"].ToString();
-                data.Created = DateTime.Parse(objects.First["created"].ToString().Substring(0, 10));
-                data.Loops = FormatNumber(Int32.Parse(objects.First["loops"].ToString()));
-                data.Likes = FormatNumber(Int32.Parse(objects.First["likes"].ToString()));
-                data.Username = objects.First["username"].ToString();
-                data.Rating = 0;
+                vine.Description = objects.First["description"].ToString();
+                vine.VideoUrl = objects.First["videoUrl"].ToString();
+                vine.Created = DateTime.Parse(objects.First["created"].ToString().Substring(0, 10));
+                vine.Loops = FormatNumber(Int32.Parse(objects.First["loops"].ToString()));
+                vine.Likes = FormatNumber(Int32.Parse(objects.First["likes"].ToString()));
+                vine.Username = objects.First["username"].ToString();
+                vine.Rating = 0;
             }
 
+            return vine;
+        }
+
+        public PartialViewResult GetVine(Vine data)
+        {
             VineViewModel viewModel = new VineViewModel()
             {
-                Vine = data,
+                Vine = RetrieveVine(data.Permalink, data.Submitter),
                 Position = Position.None
             };
             return PartialView("_VineView", viewModel);

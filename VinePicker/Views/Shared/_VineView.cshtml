@@ -1,5 +1,7 @@
 ﻿@model VinePicker.ViewModels.VineViewModel
 
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
 <style>
     .video {
         width: 100%;
@@ -70,50 +72,50 @@
             </a>
         </div>
     </div>
-
-    <script>
-        $.fn.extend({
-            animateCss: function (animationName, callback) {
-                var animationEnd = (function (el) {
-                    var animations = {
-                        animation: 'animationend',
-                        OAnimation: 'oAnimationEnd',
-                        MozAnimation: 'mozAnimationEnd',
-                        WebkitAnimation: 'webkitAnimationEnd',
-                    };
-
-                    for (var t in animations) {
-                        if (el.style[t] !== undefined) {
-                            return animations[t];
-                        }
-                    }
-                })(document.createElement('div'));
-
-                this.addClass('animated ' + animationName).one(animationEnd, function () {
-                    $(this).removeClass('animated ' + animationName);
-
-                    if (typeof callback === 'function') callback();
-                });
-
-                return this;
-            },
-        });
-
-        $('.video').parent().click(function () {
-            if ($(this).children(".video").get(0).paused) {
-                $(this).children(".video").get(0).play();
-                $(this).children(".playpause").fadeOut();
-                $('.video-info').removeClass("invisible");
-                $('.video-info').animateCss('slideInDown');
-            } else {
-                $(this).children(".video").get(0).pause();
-                $(this).children(".playpause").fadeIn();
-                if (!$('.video-info').hasClass('invisible')) {
-                    $('.video-info').animateCss('slideOutUp', function () {
-                        $('.video-info').addClass('invisible');
-                    });
-                }
-            }
-        });
-    </script>
 }
+
+<script>
+    $.fn.extend({
+        animateCss: function (animationName, callback) {
+            var animationEnd = (function (el) {
+                var animations = {
+                    animation: 'animationend',
+                    OAnimation: 'oAnimationEnd',
+                    MozAnimation: 'mozAnimationEnd',
+                    WebkitAnimation: 'webkitAnimationEnd',
+                };
+
+                for (var t in animations) {
+                    if (el.style[t] !== undefined) {
+                        return animations[t];
+                    }
+                }
+            })(document.createElement('div'));
+
+            this.addClass('animated ' + animationName).one(animationEnd, function () {
+                $(this).removeClass('animated ' + animationName);
+
+                if (typeof callback === 'function') callback();
+            });
+
+            return this;
+        },
+    });
+
+    $('.video').parent().click(function () {
+        if ($(this).children(".video").get(0).paused) {
+            $(this).children(".video").get(0).play();
+            $(this).children(".playpause").fadeOut();
+            $('.video-info').removeClass("invisible");
+            $('.video-info').animateCss('slideInDown');
+        } else {
+            $(this).children(".video").get(0).pause();
+            $(this).children(".playpause").fadeIn();
+            if (!$('.video-info').hasClass('invisible')) {
+                $('.video-info').animateCss('slideOutUp', function () {
+                    $('.video-info').addClass('invisible');
+                });
+            }
+        }
+    });
+</script>

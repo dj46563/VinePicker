@@ -8,7 +8,7 @@
     ViewData["Title"] = "Add";
 }
 
-<link rel="stylesheet" href="~/lib/a"/>
+<link rel="stylesheet" href="~/lib/a" />
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
@@ -16,6 +16,7 @@
 <script>
     var onComplete = function () {
         $('#ajaxresult').css("display", "block");
+        $('#formPermalink').val($('#inputPermalink').val());
     }
 </script>
 
@@ -28,10 +29,16 @@
           data-ajax-update="#ajaxresult" data-ajax-mode="replace"
           data-ajax-complete="onComplete">
         <label>Vine link:</label>
-        <input asp-for="Permalink" />
+        <input id="inputPermalink" asp-for="Permalink" />
         <input type="hidden" asp-for="Submitter" value="@UserManager.GetUserName(User)" />
 
         <input type="submit" value="Submit" />
+    </form>
+
+    <form asp-action="AddVine" asp-controller="Home" method="post">
+        <input id="formPermalink" type="hidden" asp-for="Permalink"/>
+        <input id="formSubmitter" type="hidden" asp-for="Submitter" value="@UserManager.GetUserName(User)"/>
+        <input type="submit" class="btn btn-success" value="Confirm"/>
     </form>
 
     <div id="ajaxresult" style="display: none">
