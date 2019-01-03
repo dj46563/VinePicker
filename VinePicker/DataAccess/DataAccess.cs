@@ -27,6 +27,15 @@ namespace VinePicker.DataAccess
             }
         }
 
+        // Check if the vine with this permalink already exists in the db
+        public static bool VineExists(string permalink)
+        {
+            using (IDbConnection connection = new SqlConnection(CnnStr))
+            {
+                return connection.ExecuteScalar<int>($"SELECT COUNT(*) FROM Vine WHERE Permalink = '{permalink}'") > 0;
+            }
+        }
+
         public static Vine GetSimilarVine(int vineId, int rating)
         {
             using (IDbConnection connection = new SqlConnection(CnnStr))

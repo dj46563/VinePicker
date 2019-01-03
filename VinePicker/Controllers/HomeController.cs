@@ -96,7 +96,8 @@ namespace VinePicker.Controllers
             // check if there actually is a vine to add
             
             Vine vine = RetrieveVine(model.Permalink, model.Submitter);
-            if (vine.VideoUrl != null)
+            // Add the vine if a vine was retrieved and if it doesnt already exist
+            if (vine.VideoUrl != null && !DataAccess.DataAccess.VineExists(vine.Permalink))
             {
                 DataAccess.DataAccess.AddVine(vine);
             }
