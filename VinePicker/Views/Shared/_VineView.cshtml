@@ -1,6 +1,35 @@
 ﻿@model VinePicker.ViewModels.VineViewModel
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $.fn.extend({
+        animateCss: function (animationName, callback) {
+            var animationEnd = (function (el) {
+                var animations = {
+                    animation: 'animationend',
+                    OAnimation: 'oAnimationEnd',
+                    MozAnimation: 'mozAnimationEnd',
+                    WebkitAnimation: 'webkitAnimationEnd',
+                };
+
+                for (var t in animations) {
+                    if (el.style[t] !== undefined) {
+                        return animations[t];
+                    }
+                }
+            })(document.createElement('div'));
+
+            this.addClass('animated ' + animationName).one(animationEnd, function () {
+                $(this).removeClass('animated ' + animationName);
+
+                if (typeof callback === 'function') callback();
+            });
+
+            return this;
+        },
+    });
+</script>
+
 
 <style>
     .video {
@@ -42,7 +71,7 @@
     }
 
     .left {
-        background-color: cyan;
+        background-color: #3abdd1;
     }
 
     .right {
@@ -55,7 +84,7 @@
 </style>
 @if (Model.Vine != null)
 {
-    <div class="card @Model.Position.ToString().ToLower()" style="width: 36rem;">
+    <div id="@Model.Id" class="card @Model.Position.ToString().ToLower()">
         <div class="card-body wrapper">
             <video class="video" src="@Model.Vine.VideoUrl" loop></video>
             <div class="playpause"></div>
@@ -75,45 +104,18 @@
 }
 
 <script>
-    $.fn.extend({
-        animateCss: function (animationName, callback) {
-            var animationEnd = (function (el) {
-                var animations = {
-                    animation: 'animationend',
-                    OAnimation: 'oAnimationEnd',
-                    MozAnimation: 'mozAnimationEnd',
-                    WebkitAnimation: 'webkitAnimationEnd',
-                };
-
-                for (var t in animations) {
-                    if (el.style[t] !== undefined) {
-                        return animations[t];
-                    }
-                }
-            })(document.createElement('div'));
-
-            this.addClass('animated ' + animationName).one(animationEnd, function () {
-                $(this).removeClass('animated ' + animationName);
-
-                if (typeof callback === 'function') callback();
-            });
-
-            return this;
-        },
-    });
-
-    $('.video').parent().click(function () {
-        if ($(this).children(".video").get(0).paused) {
-            $(this).children(".video").get(0).play();
-            $(this).children(".playpause").fadeOut();
-            $('.video-info').removeClass("invisible");
-            $('.video-info').animateCss('slideInDown');
+    $('#@Model.Id').children('.card-body').click(function () {
+        if ($('#@Model.Id').find(".video").get(0).paused) {
+            $('#@Model.Id').find(".video").get(0).play();
+            $('#@Model.Id').find(".playpause").fadeOut();
+            $('#@Model.Id').find('.video-info').removeClass("invisible");
+            $('#@Model.Id').find('.video-info').animateCss('slideInDown');
         } else {
-            $(this).children(".video").get(0).pause();
-            $(this).children(".playpause").fadeIn();
-            if (!$('.video-info').hasClass('invisible')) {
-                $('.video-info').animateCss('slideOutUp', function () {
-                    $('.video-info').addClass('invisible');
+            $('#@Model.Id').find(".video").get(0).pause();
+            $('#@Model.Id').find(".playpause").fadeIn();
+            if (!$('#@Model.Id').find('.video-info').hasClass('invisible')) {
+                $('#@Model.Id').find('.video-info').animateCss('slideOutUp', function () {
+                    $('#@Model.Id').find('.video-info').addClass('invisible');
                 });
             }
         }

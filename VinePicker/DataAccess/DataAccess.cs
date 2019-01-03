@@ -46,5 +46,22 @@ namespace VinePicker.DataAccess
                 connection.Execute(sql, vine);
             }
         }
+
+        public static int GetVineRating(int VineId)
+        {
+            using (IDbConnection connection = new SqlConnection(CnnStr))
+            {
+                return connection.QueryFirst($"SELECT Rating FROM Vine WHERE VineId = {VineId}");
+            }
+        }
+
+        public static void SetVineRating(int VineId, int rating)
+        {
+            using (IDbConnection connection = new SqlConnection(CnnStr))
+            {
+                string sql = $"UPDATE Vine SET Rating = @Rating WHERE VineId = @VineId";
+                connection.Execute(sql, new {Rating = rating, VineId = VineId});
+            }
+        }
     }
 }

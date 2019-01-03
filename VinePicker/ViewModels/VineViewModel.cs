@@ -16,5 +16,13 @@ namespace VinePicker.ViewModels
         [Required]
         public Vine Vine { get; set; }
         public Position Position { get; set; } 
+        public string Id { get; set; } // unique id to allow for multiple vine views in 1 page
+
+        public VineViewModel()
+        {
+            Vine = null;
+            Position = Position.None;
+            Id = "0";
+        }
     }
 }

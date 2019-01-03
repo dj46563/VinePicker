@@ -8,8 +8,6 @@
     ViewData["Title"] = "Add";
 }
 
-<link rel="stylesheet" href="~/lib/a" />
-
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
 
@@ -41,7 +39,7 @@
         <input type="submit" class="btn btn-success" value="Confirm"/>
     </form>
 
-    <div id="ajaxresult" style="display: none">
+    <div id="ajaxresult">
         @await Html.PartialAsync("_VineView", new VineViewModel())
     </div>
 

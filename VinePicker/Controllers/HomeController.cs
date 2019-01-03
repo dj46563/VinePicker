@@ -20,15 +20,55 @@ namespace VinePicker.Controllers
             model.LeftVine = new VineViewModel()
             {
                 Vine = DataAccess.DataAccess.GetVine(),
-                Position = Position.Left
+                Position = Position.Left,
+                Id = "1"
             };
             model.RightVine = new VineViewModel()
             {
                 Vine = DataAccess.DataAccess.GetSimilarVine(model.LeftVine.Vine.VineId, model.LeftVine.Vine.Rating),
-                Position = Position.Right
+                Position = Position.Right,
+                Id = "2"
             };
 
             return View(model);
+        }
+
+        public double GetProbability(int R1, int R2)
+        {
+            return (1.0 / (1.0 + Math.Pow(10, (R2 - R1) / 400.0)));
+        }
+
+        public int GetNewRating(int rating, double probability, bool won)
+        {
+            int k = 30;
+            double wonInt = won ? 1.0 : 0.0;
+            return (int)(rating + k * (wonInt - probability));
+        }
+
+        public ActionResult PickLeft(IndexViewModel model)
+        {
+            double probability = GetProbability(model.LeftVine.Vine.Rating, model.RightVine.Vine.Rating);
+            double reverse = 1 - probability;
+
+            // update left vine
+            DataAccess.DataAccess.SetVineRating(model.LeftVine.Vine.VineId, GetNewRating(model.LeftVine.Vine.Rating, probability, true));
+            // update right vine
+            DataAccess.DataAccess.SetVineRating(model.RightVine.Vine.VineId, GetNewRating(model.RightVine.Vine.Rating, reverse, false));
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult PickRight(IndexViewModel model)
+        {
+            double probability = GetProbability(model.RightVine.Vine.Rating, model.LeftVine.Vine.Rating);
+            double reverse = 1 - probability;
+
+            // update left vine
+            DataAccess.DataAccess.SetVineRating(model.RightVine.Vine.VineId, GetNewRating(model.RightVine.Vine.Rating, probability, true));
+            // update right vine
+            DataAccess.DataAccess.SetVineRating(model.LeftVine.Vine.VineId, GetNewRating(model.LeftVine.Vine.Rating, reverse, false));
+
+            return RedirectToAction("Index");
         }
 
         public IActionResult About()
@@ -54,7 +94,7 @@ namespace VinePicker.Controllers
             Vine vine = RetrieveVine(model.Permalink, model.Submitter);
             DataAccess.DataAccess.AddVine(vine);
 
-            return View("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         private static string FormatNumber(long num)

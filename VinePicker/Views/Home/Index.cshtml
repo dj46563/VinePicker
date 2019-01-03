@@ -3,12 +3,61 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="col-md-6">
-    @await Html.PartialAsync("_VineView", Model.LeftVine)
+<style>
+    .vine {
+        height: 100%
+    }
+
+    .leftVine {
+        float: left;
+    }
+
+    .rightVine {
+        float: right;
+    }
+
+    .vineContainer {
+        width: 100%;
+        left: 50%;
+        height: 70vw;
+    }
+
+    .pickBtn {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+</style>
+
+<div class="vineContainer">
+    <div class="col-md-6 leftVine vine">
+        <div>
+            <form asp-action="PickLeft">
+                <input type="hidden" asp-for="LeftVine.Vine.Rating"/>
+                <input type="hidden" asp-for="RightVine.Vine.Rating"/>
+                <input type="hidden" asp-for="LeftVine.Vine.VineId"/>
+                <input type="hidden" asp-for="RightVine.Vine.VineId"/>
+                <input type="submit" class="btn pickBtn btn-info" value="Pick"/>
+            </form>
+        </div>
+        
+        @await Html.PartialAsync("_VineView", Model.LeftVine)
+    </div>
+
+    <div class="col-md-6 rightVine vine">
+        <div>
+            <form asp-action="PickRight">
+                <input type="hidden" asp-for="LeftVine.Vine.Rating"/>
+                <input type="hidden" asp-for="RightVine.Vine.Rating"/>
+                <input type="hidden" asp-for="LeftVine.Vine.VineId"/>
+                <input type="hidden" asp-for="RightVine.Vine.VineId"/>
+                <input type="submit" class="btn pickBtn btn-warning" value="Pick"/>
+            </form>
+        </div>
+        
+        @await Html.PartialAsync("_VineView", Model.RightVine)
+    </div>
 </div>
 
-<div class="col-md-6">
-    @await Html.PartialAsync("_VineView", Model.RightVine)
-</div>
 
 
