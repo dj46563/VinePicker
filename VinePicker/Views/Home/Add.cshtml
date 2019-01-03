@@ -12,11 +12,23 @@
 <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
 
 <script>
+    $(document).ready(function() {
+        $('#submitForm').css("display", "none");
+    });
+
     var onComplete = function () {
         $('#ajaxresult').css("display", "block");
         $('#formPermalink').val($('#inputPermalink').val());
+        $('#submitForm').css("display", "block");
     }
 </script>
+
+<style>
+    #ajaxresult {
+        width: 40vw;
+        height: 50vw
+    }
+</style>
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -30,10 +42,10 @@
         <input id="inputPermalink" asp-for="Permalink" />
         <input type="hidden" asp-for="Submitter" value="@UserManager.GetUserName(User)" />
 
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Get Vine" />
     </form>
 
-    <form asp-action="AddVine" asp-controller="Home" method="post">
+    <form asp-action="AddVine" asp-controller="Home" method="post" id="submitForm">
         <input id="formPermalink" type="hidden" asp-for="Permalink"/>
         <input id="formSubmitter" type="hidden" asp-for="Submitter" value="@UserManager.GetUserName(User)"/>
         <input type="submit" class="btn btn-success" value="Confirm"/>

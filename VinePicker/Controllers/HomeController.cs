@@ -33,14 +33,16 @@ namespace VinePicker.Controllers
             return View(model);
         }
 
+        // ELO function to get probablity of winning (0-1)
         public double GetProbability(int R1, int R2)
         {
             return (1.0 / (1.0 + Math.Pow(10, (R2 - R1) / 400.0)));
         }
 
+        // ELO function to get new rating after winning or losing
         public int GetNewRating(int rating, double probability, bool won)
         {
-            int k = 30;
+            int k = 30; // constant, the higher the more change
             double wonInt = won ? 1.0 : 0.0;
             return (int)(rating + k * (wonInt - probability));
         }
@@ -91,8 +93,14 @@ namespace VinePicker.Controllers
 
         public ActionResult AddVine(Vine model)
         {
+            // check if there actually is a vine to add
+            
             Vine vine = RetrieveVine(model.Permalink, model.Submitter);
-            DataAccess.DataAccess.AddVine(vine);
+            if (vine.VideoUrl != null)
+            {
+                DataAccess.DataAccess.AddVine(vine);
+            }
+            
 
             return RedirectToAction("Index", "Home");
         }
@@ -142,13 +150,23 @@ namespace VinePicker.Controllers
                 jsonResource =
                     browser.DownloadWebResource(new Uri("https://archive.vine.co/posts/" + videoCode + ".json"));
             });
-            bool isSuccess = task.Wait(TimeSpan.FromMilliseconds(2000));
+
+            bool isSuccess;
+            try
+            {
+                isSuccess = task.Wait(TimeSpan.FromMilliseconds(2000));
+            }
+            catch (Exception e)
+            {
+                return vine;
+            }
+
             if (isSuccess)
             {
                 JArray objects = JArray.Parse("[" + jsonResource.GetTextContent() + "]");
                 vine.Description = objects.First["description"].ToString();
                 vine.VideoUrl = objects.First["videoUrl"].ToString();
-                vine.Created = DateTime.Parse(objects.First["created"].ToString().Substring(0, 10));
+                vine.Created = DateTime.Parse(objects.First["created"].ToString());
                 vine.Loops = FormatNumber(Int32.Parse(objects.First["loops"].ToString()));
                 vine.Likes = FormatNumber(Int32.Parse(objects.First["likes"].ToString()));
                 vine.Username = objects.First["username"].ToString();

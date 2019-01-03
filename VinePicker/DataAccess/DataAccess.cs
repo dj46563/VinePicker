@@ -22,6 +22,7 @@ namespace VinePicker.DataAccess
         {
             using (IDbConnection connection = new SqlConnection(CnnStr))
             {
+                // order by newid then get the first vine (random)
                 return connection.QueryFirst<Vine>("SELECT TOP 1 * FROM Vine ORDER BY NEWID()");
             }
         }
