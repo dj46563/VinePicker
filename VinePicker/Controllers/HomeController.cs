@@ -167,6 +167,7 @@ namespace VinePicker.Controllers
                 JArray objects = JArray.Parse("[" + jsonResource.GetTextContent() + "]");
                 vine.Description = objects.First["description"].ToString();
                 vine.VideoUrl = objects.First["videoUrl"].ToString();
+                vine.ThumbnailUrl = objects.First["thumbnailUrl"].ToString();
                 vine.Created = DateTime.Parse(objects.First["created"].ToString());
                 vine.Loops = FormatNumber(Int32.Parse(objects.First["loops"].ToString()));
                 vine.Likes = FormatNumber(Int32.Parse(objects.First["likes"].ToString()));

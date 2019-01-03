@@ -51,8 +51,8 @@ namespace VinePicker.DataAccess
             using (IDbConnection connection = new SqlConnection(CnnStr))
             {
                 string sql =
-                    "INSERT INTO Vine (Description, VideoUrl, Created, Permalink, Loops, Likes, Username, Rating, Submitter) " +
-                    "VALUES (@Description, @VideoUrl, @Created, @Permalink, @Loops, @Likes, @Username, @Rating, @Submitter)";
+                    "INSERT INTO Vine (Description, VideoUrl, Created, Permalink, Loops, Likes, Username, Rating, Submitter, ThumbnailUrl) " +
+                    "VALUES (@Description, @VideoUrl, @Created, @Permalink, @Loops, @Likes, @Username, @Rating, @Submitter, @ThumbnailUrl)";
                 connection.Execute(sql, vine);
             }
         }

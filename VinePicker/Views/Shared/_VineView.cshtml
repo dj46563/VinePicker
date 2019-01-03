@@ -104,7 +104,7 @@
 {
     <div id="@Model.Id" class="card @Model.Position.ToString().ToLower()">
         <div class="card-body wrapper">
-            <video class="video" src="@Model.Vine.VideoUrl" loop></video>
+            <video class="video" src="@Model.Vine.VideoUrl" poster="@Model.Vine.ThumbnailUrl" loop></video>
             <div class="playpause"></div>
         </div>
         <div class="card-footer video-info invisible">
