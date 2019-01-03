@@ -20,24 +20,22 @@
     
     <style>
         html {
-            height: 100%;
-            box-sizing: border-box;
+            position: relative;
+            min-height: 100%;
         }
 
         body {
-            padding-top: 0;
-            padding-bottom: 2rem;
-            position: relative;
-            margin: 0;
-            min-height: 100%;
+            margin-bottom: 20px;
         }
 
         .footer {
             position: absolute;
+            width: 100%;
             right: 0;
             bottom: 0;
             left: 0;
             text-align: center;
+            height: 20px;
         }
 
         .navbar {
@@ -70,9 +68,9 @@
 
 <div class="container body-content">
     @RenderBody()
-    <div class="footer">
-        <p>&copy; 2018 - VinePicker</p>
-    </div>
+</div>
+<div class="footer">
+    <p>&copy; 2018 - VinePicker</p>
 </div>
 
 <environment include="Development">
