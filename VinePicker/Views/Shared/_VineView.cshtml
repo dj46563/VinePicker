@@ -92,8 +92,12 @@
     }
 
     p {
-        height: 1rem;
+        height: 1.5rem;
         width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 0.5rem;
     }
 </style>
 @if (Model.Vine != null)
@@ -104,7 +108,7 @@
             <div class="playpause"></div>
         </div>
         <div class="card-footer video-info invisible">
-            <div style="float:left">
+            <div style="float:left; max-width: 85%">
                 <p>@Model.Vine.Description</p>
                 <p class="creator">Creator: @Model.Vine.Username</p>
                 <p class="video-stats">Likes: @Model.Vine.Likes Loops: @Model.Vine.Loops</p>
