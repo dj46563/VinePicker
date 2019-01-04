@@ -9,17 +9,27 @@
     .clickable-row {
         cursor: pointer;
     }
+
+    .thumbnail-td {
+        padding: 0.2rem;
+    }
+
+    img {
+        width: 2rem;
+        height: 2rem;
+    }
 </style>
 
 <h2>Leaderboard</h2>
 
 <table class="table table-hover">
     <thead>
-    <tr>
-        <th scope="col">Rank #</th>
-        <th scope="col">Description</th>
-        <th scope="col">Rating</th>
-    </tr>
+        <tr>
+            <th scope="col">Rank #</th>
+            <th scope="col"></th>
+            <th scope="col">Description</th>
+            <th scope="col">Rating</th>
+        </tr>
     </thead>
     <tbody>
     @foreach (var vine in Model.Vines)

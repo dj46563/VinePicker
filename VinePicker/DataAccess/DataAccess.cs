@@ -82,5 +82,14 @@ namespace VinePicker.DataAccess
                 connection.Execute(sql, new {Rating = rating, VineId = VineId});
             }
         }
+
+        // Update the thumbnail of a given vine (permalink)
+        public static void UpdateThumbnail(string permalink, string thumbnail)
+        {
+            using (IDbConnection connection = new SqlConnection(CnnStr))
+            {
+                connection.Execute($"UPDATE Vine SET ThumbnailUrl = '{thumbnail}' WHERE Permalink = '{permalink}'");
+            }
+        }
     }
 }
