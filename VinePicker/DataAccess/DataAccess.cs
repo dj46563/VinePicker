@@ -18,6 +18,15 @@ namespace VinePicker.DataAccess
     {
         public static string CnnStr { get; set; }
 
+        // Get all the vines ordered by rating
+        public static IEnumerable<Vine> GetAllVines()
+        {
+            using (IDbConnection connection = new SqlConnection(CnnStr))
+            {
+                return connection.Query<Vine>("SELECT * FROM Vine ORDER BY Rating DESC");
+            }
+        }
+
         public static Vine GetVine()
         {
             using (IDbConnection connection = new SqlConnection(CnnStr))

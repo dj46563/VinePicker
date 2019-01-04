@@ -1,7 +1,42 @@
-﻿
+﻿@model VinePicker.ViewModels.LeaderboardViewModel
 @{
     ViewData["Title"] = "Leaderboard";
 }
 
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<style>
+    .clickable-row {
+        cursor: pointer;
+    }
+</style>
+
 <h2>Leaderboard</h2>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">Rank #</th>
+        <th scope="col">Description</th>
+        <th scope="col">Rating</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var vine in Model.Vines)
+    {
+        @await Html.PartialAsync("_LeaderboardRow", vine);
+    }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function($) {
+        $('.clickable-row').click(function() {
+            window.open(
+                $(this).data("href"),
+                '_blank' // <- This is what makes it open in a new window.
+            );
+        });
+    });
+</script>
 

@@ -12,5 +12,6 @@ namespace VinePicker.Models
         public string Description { get; set; }
         public int Rating { get; set; }
         public string Permalink { get; set; }
+        public int Rank { get; set; }
     }
 }

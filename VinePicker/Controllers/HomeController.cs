@@ -73,6 +73,28 @@ namespace VinePicker.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Leaderboard()
+        {
+            LeaderboardViewModel model = new LeaderboardViewModel();
+            model.Vines = DataAccess.DataAccess.GetAllVines().Select(x => new LeaderboardVine()
+            {
+                ThumbnailUrl = x.ThumbnailUrl,
+                Description = x.Description,
+                Rating = x.Rating,
+                Permalink = x.Permalink
+            }).ToList();
+
+            // Assign the ranks to the vines
+            int rank = 1;
+            foreach (LeaderboardVine leaderboardVine in model.Vines)
+            {
+                leaderboardVine.Rank = rank;
+                rank++;
+            }
+
+            return View(model);
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

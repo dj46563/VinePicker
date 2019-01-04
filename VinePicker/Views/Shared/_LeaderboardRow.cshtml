@@ -1,0 +1,10 @@
+﻿@model LeaderboardVine
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<tr class="clickable-row" data-href="@Model.Permalink">
+    <th scope="row">@Model.Rank</th>
+    <td>@Model.Description</td>
+    <td>@Model.Rating</td>
+</tr>
